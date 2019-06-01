@@ -1,0 +1,18 @@
+@font-face {
+    font-family: 'iransans';
+    src: url('../fonts/iseot.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/iseot.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('../fonts/isttf.ttf') format('truetype'); /* Safari, Android, iOS */
+}
+
+@font-face {
+    font-family: 'gadugi';
+    src: url('../fonts/gadugi.ttf') format('truetype'); /* IE9 Compat Modes */
+}
+
+.isansFont {
+    font-family: 'iransans' !important;
+}
+
+.gadugiFont {
+    font-family: 'gadugi' !important;
+}
