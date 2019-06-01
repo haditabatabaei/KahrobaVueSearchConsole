@@ -163,13 +163,21 @@
 
         <!-- Result Table -->
         <div class="row justify-content-center">
-            <div class="col-md-12">
+            <div class="col-md-12 text-center">
                 <h2 class="text-primary text-center" id="resultTable" v-if="this.searchNum > 0">
                     Search Result(s) : {{'[ ' + searchResultProfiles.length + ' items ]'}}
                 </h2>
                 <h2 class="text-primary text-center" id="resultTable" v-else="this.searchNum > 0">
                     Search Result(s) : {{'[]'}}
                 </h2>
+                <download-excel
+                        class="btn btn-info exportBtn"
+                        :data="this.exportedJsonProfiles"
+                        :name="'KhazeshgarExportResultBySneeds.ir-'+ Date() + '.xls'"
+                        v-if="this.isExportBtnActive"
+                >
+                    Export Search Results
+                </download-excel>
             </div>
             <div class="col-md-10">
                 <div class="table-responsive">
@@ -246,6 +254,7 @@
                 shownProfiles: [],
                 searchResultProfiles: [],
                 advanceSearchIsShown: true,
+                isExportBtnActive: false,
                 valueOfScrollY: null,
                 inputData: {
                     name: null,
@@ -378,6 +387,7 @@
             },
             search: function () {
                 this.searchNum++;
+                this.isExportBtnActive = true;
                 this.searchResultProfiles = this.$store.getters.data;
                 this.pagination.currentPage = 1;
                 this.shownProfiles = [];
@@ -478,7 +488,58 @@
                 setTimeout(this.smoothScrollToTop, timeOffset);
             }
         },
-        computed: {},
+        computed: {
+            exportedJsonProfiles: function () {
+                let toReturnObj = [];
+                for (let i = 0 ; i < this.searchResultProfiles.length ; i++) {
+                    let profileFullObject = {};
+                    let tempProfile = this.searchResultProfiles[i];
+                    profileFullObject["name"] = tempProfile.name;
+                    profileFullObject["phone"] = tempProfile.phone;
+                    profileFullObject["email"] = tempProfile.email;
+                    profileFullObject["country"] = tempProfile.country;
+                    profileFullObject["hasEmail"] = tempProfile.hasEmail;
+                    profileFullObject["hasExperiences"] = tempProfile.hasExperiences;
+                    profileFullObject["hasWebsites"] = tempProfile.hasWebsites;
+                    profileFullObject["hasSkills"] = tempProfile.hasSkills;
+                    profileFullObject["hasJournals"] = tempProfile.hasJournals;
+                    profileFullObject["isTeacher"] = tempProfile.isTeacher;
+                    for (let i = 0; i < tempProfile.universities.length; i++) {
+                        profileFullObject["university" + i + "name"] = tempProfile.universities[i].name;
+                        profileFullObject["university" + i + "date"] = tempProfile.universities[i].date;
+                        profileFullObject["university" + i + "degree"] = tempProfile.universities[i].degree;
+                        profileFullObject["university" + i + "field of study"] = tempProfile.universities[i]["field of study"];
+                    }
+
+                    for (let i = 0; i < tempProfile.experiences.length; i++) {
+                        profileFullObject["experience" + i + "company"] = tempProfile.experiences[i].company;
+                        profileFullObject["experience" + i + "title"] = tempProfile.experiences[i].title;
+                    }
+
+                    for (let i = 0; i < tempProfile.skills.length; i++) {
+                        profileFullObject["skill" + i] = tempProfile.skills[i];
+                    }
+
+                    for (let i = 0; i < tempProfile.websites.length; i++) {
+                        profileFullObject["website" + i] = tempProfile.websites[i];
+                    }
+
+                    for (let i = 0; i < tempProfile.journals.length; i++) {
+                        profileFullObject["journal" + i + "title"] = tempProfile.journals[i].company;
+                        profileFullObject["journal" + i + "date"] = tempProfile.journals[i].date;
+                        profileFullObject["journal" + i + "url"] = tempProfile.journals[i].url;
+                        for (let j = 0; j < tempProfile.journals[i].authors.length; j++) {
+                            profileFullObject["journal" + i + "author" + j] = tempProfile.journals[i].authors[j];
+                        }
+                    }
+
+                    toReturnObj.push(profileFullObject);
+                }
+
+
+                return toReturnObj;
+            }
+        },
         mounted() {
             window.console.log("home component mounted.");
             this.valueOfScrollY = scrollY;
@@ -491,7 +552,6 @@
             window.console.log("data indexes updated");
             window.console.log("home component created.");
             this.searchResultProfiles = this.$store.getters.data;
-            // window.console.log(this.searchResultProfiles);
         }
     }
 </script>
@@ -525,6 +585,11 @@
 
     .titleColumn h3 {
         font-size: 1.2rem;
+    }
+
+    .exportBtn {
+        font-weight: 400;
+        margin: 30px;
     }
 
     @media only screen and (max-width: 768px) {
