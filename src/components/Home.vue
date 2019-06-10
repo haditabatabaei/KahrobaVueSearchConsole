@@ -163,7 +163,7 @@
 
         <!-- Result Table -->
         <div class="row justify-content-center">
-            <div class="col-md-12 text-center">
+            <div class="col-md-12 text-center   ">
                 <h2 class="text-primary text-center" id="resultTable" v-if="this.searchNum > 0">
                     Search Result(s) : {{'[ ' + searchResultProfiles.length + ' items ]'}}
                 </h2>
