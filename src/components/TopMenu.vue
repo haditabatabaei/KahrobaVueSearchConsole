@@ -33,6 +33,7 @@
                     <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
                         <li class="nav-item"><router-link to="/" class="nav-link isansFont">Home</router-link></li>
                         <li class="nav-item"><a href="http://www.sneeds.ir" target="_blank" class="nav-link isansFont">Sneeds.ir</a></li>
+                        <li class="nav-item"><router-link to="/analysis" class="nav-link isansFont">Analysis</router-link></li>
                     </ul>
                 </div>
             </div>
